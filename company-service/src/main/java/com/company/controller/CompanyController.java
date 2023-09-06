@@ -3,6 +3,7 @@ package com.company.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,8 @@ import com.company.entity.Company;
 import com.company.models.User;
 import com.company.service.CompanyService;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 @RestController
 @RequestMapping("/api/companies")
 public class CompanyController {
@@ -23,6 +26,8 @@ public class CompanyController {
 	
 	@Autowired
 	private CompanyService companyService;
+	
+	//***THIS METHODS ARE OF MICROSERVICE COMPANY***
 	
 	@GetMapping
 	public ResponseEntity<List<Company>> listAllCompanies(){
@@ -42,12 +47,6 @@ public class CompanyController {
 		return ResponseEntity.ok(newCompany);
 	}
 	
-	@PostMapping("/users/{companyId}")
-	public ResponseEntity<User> saveUser(@RequestBody User user, @PathVariable("companyId") int companyId){
-		User newUser = companyService.saveUser(companyId, user);
-		return ResponseEntity.ok(newUser);
-	}
-	
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Company> findCompanyById(@PathVariable("id") int companyId){
@@ -55,5 +54,21 @@ public class CompanyController {
 		if(company == null) {
 			return ResponseEntity.noContent().build();		}
 		return ResponseEntity.ok(company);
+	}
+	
+	//***THIS METHONDS NEED THE OTHERS MICROSERVICES***
+	
+	@CircuitBreaker(name= "UserCB", fallbackMethod = "fbSaveUser")
+	@PostMapping("/users/{companyId}")
+	public ResponseEntity<User> saveUser(@RequestBody User user, @PathVariable("companyId") int companyId){
+		User newUser = companyService.saveUser(companyId, user);
+		return ResponseEntity.ok(newUser);
+	}
+	
+	
+	//***THIS METHODS ARE FOR THE FALLBACK OF CIRCUIT BREAKER***
+	
+	private ResponseEntity<User> fbSaveUser(@PathVariable("companyId") int companyId, @RequestBody User user, RuntimeException ex){
+		return new ResponseEntity("The service for add news users is not working, please try in five minutes.", HttpStatus.OK);
 	}
 }   
