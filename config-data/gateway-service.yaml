@@ -15,12 +15,12 @@ spring:
       discovery:
         locator:
           enabled: true
-        routes:
-          - id: user-service
-            uri: lb://user-service
-            predicates:
-              - Path=/api/users/**
-          - id: company-service
-            uri: lb://company-service
-            predicates:
-              - Path=/api/companies/**
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+        - id: company-service
+          uri: lb://company-service
+          predicates:
+            - Path=/api/companies/**
