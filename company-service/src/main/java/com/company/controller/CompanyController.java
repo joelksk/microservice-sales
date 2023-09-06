@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.company.entity.Company;
+import com.company.feingClients.UserFeingClient;
 import com.company.models.User;
 import com.company.service.CompanyService;
 
@@ -62,7 +63,20 @@ public class CompanyController {
 	@PostMapping("/users/{companyId}")
 	public ResponseEntity<User> saveUser(@RequestBody User user, @PathVariable("companyId") int companyId){
 		User newUser = companyService.saveUser(companyId, user);
+		if(user == null ) {
+			return ResponseEntity.noContent().build();
+		}
 		return ResponseEntity.ok(newUser);
+	}
+	
+	@CircuitBreaker(name= "UserCB", fallbackMethod = "fbGetAllUsers")
+	@GetMapping("/users")
+	public ResponseEntity<List<User>> listAllUsers(){
+		List<User> users = companyService.getAllUsers();
+		if(users == null ||users.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
+		return ResponseEntity.ok(users);
 	}
 	
 	
@@ -71,4 +85,9 @@ public class CompanyController {
 	private ResponseEntity<User> fbSaveUser(@PathVariable("companyId") int companyId, @RequestBody User user, RuntimeException ex){
 		return new ResponseEntity("The service for add news users is not working, please try in five minutes.", HttpStatus.OK);
 	}
+	
+	private ResponseEntity<List<User>> fbGetAllUsers(RuntimeException ex){
+		return new ResponseEntity("The service for get all users is not working, please try in five minutes", HttpStatus.OK);
+	}
 }   
+

@@ -32,9 +32,17 @@ public class CompanyService {
 		return newCompany;
 	}
 	
+	
+	//***THIS METHONDS NEED THE OTHERS MICROSERVICES***
+	
 	public User saveUser(int id, User user) {
 		user.setCompanyId(id);
 		User newUser = userFeingClient.saveUser(user);
 		return newUser;
+	}
+	
+	public List<User> getAllUsers(){
+		List<User> users = userFeingClient.getAllUsers();
+		return users;
 	}
 }
