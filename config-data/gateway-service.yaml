@@ -18,9 +18,9 @@ spring:
         routes:
           - id: user-service
             uri: lb://user-service
-          predicates:
-            - Path=/api/users/**
+            predicates:
+              - Path=/api/users/**
           - id: company-service
             uri: lb://company-service
-          predicates:
-            - Path=/api/companies/**
+            predicates:
+              - Path=/api/companies/**
