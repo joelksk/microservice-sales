@@ -32,6 +32,14 @@ public class CompanyService {
 		return newCompany;
 	}
 	
+	public boolean searchCompany(String email) {
+		Company company = companyRepository.findByEmail(email);
+		if(company==null) {
+			return false;
+		}
+		return true;
+	}
+	
 	
 	//***THIS METHONDS NEED THE OTHERS MICROSERVICES***
 	

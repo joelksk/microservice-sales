@@ -41,11 +41,15 @@ public class CompanyController {
 	
 	@PostMapping
 	public ResponseEntity<Company> saveCompany(@RequestBody Company company){
-		Company newCompany = companyService.saveCompany(company);
-		if(newCompany == null) {
-			return ResponseEntity.noContent().build();		
-			}
-		return ResponseEntity.ok(newCompany);
+		if(!companyService.searchCompany(company.getEmail())) {
+			Company newCompany = companyService.saveCompany(company);
+			if(newCompany == null) {
+				return ResponseEntity.noContent().build();		
+				}
+			return ResponseEntity.ok(newCompany);
+		}
+		return new ResponseEntity("Company has already created, change the email or loggin with your password", HttpStatus.OK);
+		
 	}
 	
 	

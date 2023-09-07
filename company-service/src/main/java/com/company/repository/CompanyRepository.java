@@ -11,4 +11,6 @@ import com.company.entity.Company;
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
 
 	public List<Company> findAll();
+
+	public Company findByEmail(String email);
 }
