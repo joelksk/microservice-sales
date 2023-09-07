@@ -24,3 +24,7 @@ spring:
           uri: lb://company-service
           predicates:
             - Path=/api/companies/**
+        - id: stock-service
+          uri: lb://stock-service
+          predicates:
+            - Path=/api/stock/**
