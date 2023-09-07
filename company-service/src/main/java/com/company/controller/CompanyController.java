@@ -63,6 +63,7 @@ public class CompanyController {
 	@PostMapping("/users/{companyId}")
 	public ResponseEntity<User> saveUser(@RequestBody User user, @PathVariable("companyId") int companyId){
 		User newUser = companyService.saveUser(companyId, user);
+		System.out.println("Entramos al metodo SAVEUSER del controller company");
 		if(user == null ) {
 			return ResponseEntity.noContent().build();
 		}
@@ -82,7 +83,7 @@ public class CompanyController {
 	
 	//***THIS METHODS ARE FOR THE FALLBACK OF CIRCUIT BREAKER***
 	
-	private ResponseEntity<User> fbSaveUser(@PathVariable("companyId") int companyId, @RequestBody User user, RuntimeException ex){
+	private ResponseEntity<User> fbSaveUser(RuntimeException ex){
 		return new ResponseEntity("The service for add news users is not working, please try in five minutes.", HttpStatus.OK);
 	}
 	
