@@ -13,7 +13,7 @@ import com.stock.service.StockService;
 
 
 @RestController
-@RequestMapping("api/stocks")
+@RequestMapping("/api/stocks")
 public class StockController {
 
 	@Autowired
