@@ -23,4 +23,4 @@ resilience4j.circuitbreaker:
 
 spring:
   application:
-    zipking: http://localhost:9411
+    zipkin: http://localhost:9411
