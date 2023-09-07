@@ -1,15 +1,30 @@
 package com.stock.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class Stock {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	
+	@Column(name= "code_product")
 	private String codeProduct;
+	
+	@Column(name= "name_product")
 	private String nameProduct;
+	
 	private int quantity;
+	
 	private boolean available;
+	
+	@Column(name= "company_id")
+	private int companyId;
 	
 	public Stock() {
 		
